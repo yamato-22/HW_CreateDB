@@ -68,5 +68,44 @@ join albums_singers as2 on as2.album_id = a.album_id
 where as2.singer_id = (select singer_id from singer where nickname = 'Louis Armstrong')
 group by c.name;
 
+-- Задание №4
+--
+--Названия альбомов, в которых присутствуют исполнители более чем одного жанра.
+
+select a.name as "Название альбома" from album a 
+join albums_singers as2 on as2.album_id = a.album_id
+join singer s on s.singer_id = as2.singer_id
+where s.singer_id = (select singer_id
+                     from genres_singers
+                     group by singer_id
+                     having count(singer_id) > 1)
+;
+                    
+-- Наименования треков, которые не входят в сборники.
+
+select name "Название трека" from track t
+where t.track_id not in (select track_id from tracks_collections);
+
+-- Исполнитель или исполнители, написавшие самый короткий по продолжительности трек, 
+-- теоретически таких треков может быть несколько.
+
+select nickname "Исполнитель" from singer s 
+join albums_singers as2 on as2.singer_id = s.singer_id
+join track t on t.album_id = as2.album_id
+where t.duration in (select duration from track t2 
+                    order by duration 
+                    limit 3);
+
+-- Названия альбомов, содержащих наименьшее количество треков.
+
+select name from album a 
+where a.album_id in (select album_id from track t
+                     group by t.album_id 
+                     order by count(t.track_id) asc
+                     limit 1
+                    );
+
+
+
 
  
