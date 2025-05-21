@@ -21,13 +21,13 @@ order by year;
 -- Исполнители, чьё имя состоит из одного слова.
 
 select nickname as "Исполнитель" from singer
-where LENGTH(nickname) = 1;
+where nickname not like '% %';
 
 
 -- Название треков, которые содержат слово «мой» или «my».
 
 select name as "Наименование трека" from track
-where name like '%my%' or name like '%мой%';
+where string_to_array( LOWER(name), ' ') && array['мой', 'my'];
 
 -- Задание 3
 --
@@ -51,12 +51,13 @@ group by a."name";
 
 --Все исполнители, которые не выпустили альбомы в 2020 году.
 
-select nickname from singer s 
-join albums_singers as2 on as2.singer_id = s.singer_id
-join album a on as2.album_id = a.album_id
-where a."year" != 2020
-group by nickname;
-
+select nickname from singer
+where nickname not in (
+	select nickname from singer s 
+	join albums_singers as2 on as2.singer_id = s.singer_id
+	join album a on as2.album_id = a.album_id
+	where a.year = 2020
+);
 
 --Названия сборников, в которых присутствует конкретный исполнитель (выберите его сами).
 
@@ -92,9 +93,7 @@ where t.track_id not in (select track_id from tracks_collections);
 select nickname "Исполнитель" from singer s 
 join albums_singers as2 on as2.singer_id = s.singer_id
 join track t on t.album_id = as2.album_id
-where t.duration in (select duration from track t2 
-                    order by duration 
-                    limit 3);
+where t.duration = (select MIN(duration) from track);
 
 -- Названия альбомов, содержащих наименьшее количество треков.
 

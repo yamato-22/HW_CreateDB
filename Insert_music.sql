@@ -1,14 +1,14 @@
--- добавляем жанры
+-- Добавляем жанры
 
 INSERT into music_genre  (name)
 VALUES ('Rock'), ('Jazz'), ('Pop'), ('Blues');
 
--- добавляем исполнителей
+-- Добавляем исполнителей
 
 INSERT into singer  (nickname)
 VALUES ('Victor Tsoy'), ('Louis Armstrong'), ('B B King'), ('Madonna'), ('X');
 
--- создаем и добавляем  связки Жанр - Исполнитель
+-- Cоздаем и добавляем  связки Жанр - Исполнитель
 
 INSERT into genres_singers (singer_id, genre_id)
 select s.singer_id, m.genre_id  from singer s
@@ -40,7 +40,7 @@ select s.singer_id, m.genre_id  from singer s
 join music_genre m on m.name = 'Pop'
 where nickname = 'X';
 
--- создаем и добавляем альбомы
+-- Создаем и добавляем альбомы
 
 INSERT into album (name, year)
 VALUES ('Erotica',1992), ('Black Album',1991), ('Night', 2022), ('My Jazz', 2012), ('Bad Blues', 2020), ('My music', 2018);
@@ -60,7 +60,7 @@ where nickname = 'Madonna';
 INSERT into albums_singers (singer_id, album_id)
 select s.singer_id, a.album_id  from singer s
 join album a on a.name = 'Night'
-where nickname in ('Madonna', 'Victor Tsoy') ;
+where nickname in ('Madonna', 'Victor Tsoy');
 
 INSERT into albums_singers (singer_id, album_id)
 select s.singer_id, a.album_id  from singer s
@@ -77,8 +77,7 @@ select s.singer_id, a.album_id  from singer s
 join album a on a.name = 'My music'
 where nickname = 'X';
 
-
--- заполнение таблицы с треками
+-- Заполненяем таблицу с треками
 
 INSERT into track (name, duration, album_id)
 select 'Star', 268, a.album_id from album a
@@ -87,7 +86,6 @@ where a.name = 'Black Album';
 INSERT into track (name, duration, album_id)
 select 'Cuckoo', 400, a.album_id from album a
 where a.name = 'Black Album';
-
 
 INSERT into track (name, duration, album_id)
 select 'Anthill', 318, a.album_id from album a
@@ -137,18 +135,18 @@ INSERT into track (name, duration, album_id)
 select 'The my track', 122, a.album_id from album a
 where a.name = 'My music';
 
--- создаем сборники
+-- Создаем сборники
 
 INSERT into collection  (name, year)
 VALUES ('Best',2020), ('Top-5',2023), ('Hi load', 2024), ('Relax',2001);
 
--- наполняем сборники треками
+-- Наполняем сборники треками
 
 INSERT into tracks_collections (collection_id, track_id)
 select c.collection_id, t.track_id from track t
 join collection c on c.name = 'Best'
 join album a on a.year  < c."year"
-where t.album_id = a.album_id
+where t.album_id = a.album_id;
 
 INSERT into tracks_collections (collection_id, track_id)
 select c.collection_id, t.track_id from track t
@@ -172,6 +170,5 @@ where t.album_id = a.album_id;
 INSERT into tracks_collections (collection_id, track_id)
 select c.collection_id, t.track_id from track t
 join collection c on c.name = 'Hi load'
-where t.track_id % 2 = 0
-;
+where t.track_id % 2 = 0;
 
