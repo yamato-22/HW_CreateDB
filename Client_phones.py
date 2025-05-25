@@ -129,7 +129,7 @@ def find_client(conn, first_name=None, last_name=None, email=None, phone=None):
         pprint(cur.fetchall())
 
 if __name__ == '__main__':
-    with psycopg2.connect(database="client_phones", user="postgres", password="zont@s") as conn:
+    with psycopg2.connect(database="client_phones", user="postgres", password="zzzzzzzzzz") as conn:
         clear_db(conn)
         create_db(conn)
         add_client(conn, 'Иван', 'Иванов', 'Ivan@yandex.ru')
